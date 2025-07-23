@@ -8,7 +8,36 @@ const errorText = "ERROR";
 init();
 
 function init(){
+    const numberButtons = document.querySelectorAll(".number");
+    const operatorButtons = document.querySelectorAll(".operator");
+    const acButton = document.querySelector("#ac");
+    const periodButton = document.querySelector(".period");
 
+    numberButtons.forEach((button) => {
+        button.addEventListener("mouseenter", (e) => highlightOnEnter(e, "blue"));
+        button.addEventListener("mouseleave", (e) => highlightOnExit(e));
+    });
+
+    operatorButtons.forEach((button) => {
+        button.addEventListener("mouseenter", (e) => highlightOnEnter(e, "aqua"));
+        button.addEventListener("mouseleave", (e) => highlightOnExit(e));
+    });
+
+    acButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "red"));
+    acButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
+
+    periodButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "blue"));
+    periodButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
+}
+
+function highlightOnEnter(e, color){
+    e.target.style.backgroundColor = color;
+    e.target.style.color = "white";
+}
+
+function highlightOnExit(e){
+    e.target.style.backgroundColor = "white";
+    e.target.style.color = "black";
 }
 
 function operate(a, b, operator){
