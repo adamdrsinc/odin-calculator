@@ -10,6 +10,7 @@ init();
 function init(){
     addHighlightEventListeners();
     addInputEventListeners();
+    addEqualsEventListener();
 }
 
 function addHighlightEventListeners(){
@@ -43,12 +44,81 @@ function addInputEventListeners(){
     });
 }
 
+function addEqualsEventListener(){
+    const equalsButton = document.querySelector("#equals");
+    equalsButton.addEventListener('click', () => performCalculation());
+}
+
+function performCalculation(){
+    const display = document.querySelector("#calculator-sum");
+
+    let sumText = display.textContent;
+    const parsed = Number.parseInt(sumText.slice(-1));
+    const isNumber = !Number.isNaN(parsed);
+    if(!isNumber){
+        sumText = sumText.slice(0, -2);
+    }
+
+    const splitSumText = sumText.split(' ');
+    if(splitSumText.length <= 2){
+        display.textContent = splitSumText[0];
+    }
+
+    const result = performCalculationHelper(sumText);
+
+    display.textContent = result;
+}
+
+function performCalculationHelper(sum){
+    let splitSum = sum.split(' ');
+
+    for(let i = 1; i < splitSum.length; i+=2){
+        if(splitSum[i] === '/'){
+            const numBefore = splitSum[i - 1];
+            const numAfter = splitSum[i + 1];
+            const result = operate(numBefore, numAfter, '/');
+
+            splitSum.splice(i-1, 3, result);
+
+        } else if (splitSum[i] === 'x'){
+            const numBefore = splitSum[i - 1];
+            const numAfter = splitSum[i + 1];
+            const result = operate(numBefore, numAfter, 'x');
+
+            splitSum.splice(i-1, 3, result);
+        }
+    }
+
+    for(let i = 1; i < splitSum.length; i+= 2){
+        if(splitSum[i] === '+'){
+            const numBefore = splitSum[i - 1];
+            const numAfter = splitSum[i + 1];
+            const result = operate(numBefore, numAfter, '+');
+
+            splitSum.splice(i-1, 3, result);
+        } else if (splitSum[i] === '-'){
+            const numBefore = splitSum[i - 1];
+            const numAfter = splitSum[i + 1];
+            const result = operate(numBefore, numAfter, '-');
+
+
+            splitSum.splice(i-1, 3, result);
+        }
+    }
+
+    return splitSum[0];
+}
+
+
 function addInputToDisplay(element){
     const value = element.target.value;
     const display = document.querySelector("#calculator-sum");
 
-    const isNumber = Number.parseInt(value);
-    const lastItemInDisplayIsNumber = Number.parseInt(display.textContent.slice(-1));
+    let parsed = Number.parseInt(value);
+    const isNumber = !Number.isNaN(parsed);
+    
+    parsed = Number.parseInt(display.textContent.slice(-1));
+    const lastItemInDisplayIsNumber = !Number.isNaN(parsed);
 
     if(lastItemInDisplayIsNumber){
         if(isNumber){
@@ -58,10 +128,11 @@ function addInputToDisplay(element){
         }
     } else {
         if(isNumber){
-            display.textContent += " " + value;
+            display.textContent === "" ? display.textContent += value : display.textContent += " " + value;
         }
     }
 }
+
 
 function highlightOnEnter(e, color){
     e.target.style.backgroundColor = color;
@@ -90,7 +161,7 @@ function operate(a, b, operator){
             return divide(a, b);
             break;
         }
-        case "*": {
+        case "x": {
             //TODO: Implement
             return multiply(a, b);
             break;
@@ -101,14 +172,13 @@ function operate(a, b, operator){
     }
 }
 
-
 function add(a, b){
     const numA = Number.parseFloat(a);
     if(numA === NaN) return errorText;
     const numB = Number.parseFloat(b);
     if(numB === NaN) return errorText;
 
-    return a + b;
+    return numA + numB;
 }
 
 function subtract(a, b){
@@ -117,7 +187,7 @@ function subtract(a, b){
     const numB = Number.parseFloat(b);
     if(numB === NaN) return errorText;
 
-    return a - b;
+    return numA - numB;
 }
 
 function multiply(a, b){
@@ -126,7 +196,7 @@ function multiply(a, b){
     const numB = Number.parseFloat(b);
     if(numB === NaN) return errorText;
 
-    return a * b;
+    return numA * numB;
 }
 
 function divide(a, b){
@@ -135,5 +205,5 @@ function divide(a, b){
     const numB = Number.parseFloat(b);
     if(numB === NaN) return errorText;
 
-    return a / b;
+    return numA / numB;
 }
