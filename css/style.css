@@ -36,6 +36,8 @@ body {
     border-radius: 16px;
     padding: 0px 24px;
 
+    width: 320px;
+    max-width: 90vw;
 }
 
 #calculator-top{
@@ -52,18 +54,26 @@ body {
 }
 
 #calculator-display{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: end;
-
     background-color: white;
     border: 1px solid gray;
     border-radius: 8px;
-    width: 100%;
-    padding: 12px;
-
+    padding: 0px 8px;
     min-height: 48px;
+
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:right;
+    overflow:hidden;
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+#calculator-sum{
+    float: right;
 }
 
 #calculator-inputs{

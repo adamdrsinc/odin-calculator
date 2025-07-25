@@ -39,12 +39,28 @@ function addInputEventListeners(){
     const allInputs = document.querySelectorAll(".input-button");
 
     allInputs.forEach((inp) => {
-        inp.addEventListener('click', );
+        inp.addEventListener('click', (element) => addInputToDisplay(element));
     });
 }
 
-function addInputToDisplay(){
-    
+function addInputToDisplay(element){
+    const value = element.target.value;
+    const display = document.querySelector("#calculator-sum");
+
+    const isNumber = Number.parseInt(value);
+    const lastItemInDisplayIsNumber = Number.parseInt(display.textContent.slice(-1));
+
+    if(lastItemInDisplayIsNumber){
+        if(isNumber){
+            display.textContent += value;
+        } else {
+            display.textContent += " " + value;
+        }
+    } else {
+        if(isNumber){
+            display.textContent += " " + value;
+        }
+    }
 }
 
 function highlightOnEnter(e, color){
