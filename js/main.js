@@ -15,6 +15,40 @@ function init(){
         document.querySelector("#calculator-sum").textContent = "";
     })
     document.querySelector("#backspace").addEventListener('click', () => performBackspace());
+
+    addKeyboardInput();
+}
+
+function addKeyboardInput(){
+    window.addEventListener("keypress", function(event){
+        if(event.defaultPrevented){
+            return;
+        }
+
+        const isOperator = 
+            event.key === "-" 
+            || event.key === "+" 
+            || event.key === "/" 
+            || event.key === "*" 
+            || event.key === "x";
+
+        if((event.key >= 0 && event.key <= 9) || isOperator){
+            const value = event.key === "*" ? "x" : event.key;
+            addInputToDisplay(value);
+        } else {
+            switch(event.key){
+                case "Enter" : {
+                    performCalculation();
+                    break;
+                }
+                case "Backspace" : {
+                    performBackspace();
+                    break;
+                }
+                default : return;
+            }
+        }
+    });
 }
 
 function performBackspace(){
@@ -61,10 +95,9 @@ function addInputEventListeners(){
     const allInputs = document.querySelectorAll(".input-button");
 
     allInputs.forEach((inp) => {
-        inp.addEventListener('click', (element) => addInputToDisplay(element));
+        inp.addEventListener('click', (element) => addInputToDisplay(element.target.value));
     });
 }
-
 
 function performCalculation(){
     const display = document.querySelector("#calculator-sum");
@@ -143,9 +176,7 @@ function performCalculationHelper(sum){
     return splitSum[0];
 }
 
-
-function addInputToDisplay(element){
-    const value = element.target.value;
+function addInputToDisplay(value){
     const display = document.querySelector("#calculator-sum");
     const splitText = display.textContent.split(' ');
 
