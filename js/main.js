@@ -10,7 +10,10 @@ init();
 function init(){
     addHighlightEventListeners();
     addInputEventListeners();
-    addEqualsEventListener();
+    document.querySelector("#equals").addEventListener('click', () => performCalculation());
+    document.querySelector("#ac").addEventListener('click', () => {
+        document.querySelector("#calculator-sum").textContent = "";
+    })
 }
 
 function addHighlightEventListeners(){
@@ -44,10 +47,6 @@ function addInputEventListeners(){
     });
 }
 
-function addEqualsEventListener(){
-    const equalsButton = document.querySelector("#equals");
-    equalsButton.addEventListener('click', () => performCalculation());
-}
 
 function performCalculation(){
     const display = document.querySelector("#calculator-sum");
@@ -113,12 +112,25 @@ function performCalculationHelper(sum){
 function addInputToDisplay(element){
     const value = element.target.value;
     const display = document.querySelector("#calculator-sum");
+    const splitText = display.textContent.split(' ');
 
     let parsed = Number.parseInt(value);
     const isNumber = !Number.isNaN(parsed);
     
-    parsed = Number.parseInt(display.textContent.slice(-1));
+    parsed = Number.parseFloat(splitText[splitText.length - 1]);
     const lastItemInDisplayIsNumber = !Number.isNaN(parsed);
+
+    if(value === "."){
+        if(!splitText[splitText.length - 1].includes(".")){
+            if(lastItemInDisplayIsNumber){
+                display.textContent += ".";
+                return;
+            } 
+        }
+        return;
+    }
+
+
 
     if(lastItemInDisplayIsNumber){
         if(isNumber){
