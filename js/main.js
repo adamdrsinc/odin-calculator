@@ -8,10 +8,15 @@ const errorText = "ERROR";
 init();
 
 function init(){
+    addHighlightEventListeners();
+    addInputEventListeners();
+}
+
+function addHighlightEventListeners(){
     const numberButtons = document.querySelectorAll(".number");
     const operatorButtons = document.querySelectorAll(".operator");
     const acButton = document.querySelector("#ac");
-    const periodButton = document.querySelector(".period");
+    const equalsButton = document.querySelector("#equals");
 
     numberButtons.forEach((button) => {
         button.addEventListener("mouseenter", (e) => highlightOnEnter(e, "blue"));
@@ -26,8 +31,20 @@ function init(){
     acButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "red"));
     acButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
 
-    periodButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "blue"));
-    periodButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
+    equalsButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "red"));
+    equalsButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
+}
+
+function addInputEventListeners(){
+    const allInputs = document.querySelectorAll(".input-button");
+
+    allInputs.forEach((inp) => {
+        inp.addEventListener('click', );
+    });
+}
+
+function addInputToDisplay(){
+    
 }
 
 function highlightOnEnter(e, color){
