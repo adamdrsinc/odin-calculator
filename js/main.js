@@ -14,6 +14,12 @@ function init(){
     document.querySelector("#ac").addEventListener('click', () => {
         document.querySelector("#calculator-sum").textContent = "";
     })
+    document.querySelector("#backspace").addEventListener('click', () => performBackspace());
+}
+
+function performBackspace(){
+    const display = document.querySelector("#calculator-sum");
+    
 }
 
 function addHighlightEventListeners(){
@@ -63,7 +69,8 @@ function performCalculation(){
         display.textContent = splitSumText[0];
     }
 
-    const result = performCalculationHelper(sumText);
+    let result = performCalculationHelper(sumText);
+    result = Math.round(result * 1000) / 1000;
 
     display.textContent = result;
 }
@@ -71,11 +78,17 @@ function performCalculation(){
 function performCalculationHelper(sum){
     let splitSum = sum.split(' ');
 
-    for(let i = 1; i < splitSum.length; i+=2){
+
+    let i = 1;
+    while(i < splitSum.length){
         if(splitSum[i] === '/'){
             const numBefore = splitSum[i - 1];
             const numAfter = splitSum[i + 1];
             const result = operate(numBefore, numAfter, '/');
+
+            if(result === errorText){
+                return errorText;
+            }
 
             splitSum.splice(i-1, 3, result);
 
@@ -85,10 +98,17 @@ function performCalculationHelper(sum){
             const result = operate(numBefore, numAfter, 'x');
 
             splitSum.splice(i-1, 3, result);
+        } else {
+            i += 2;
         }
     }
 
-    for(let i = 1; i < splitSum.length; i+= 2){
+    if(splitSum.length === 1){
+        return splitSum[0];
+    }
+
+    i = 1;
+    while(i < splitSum.length){
         if(splitSum[i] === '+'){
             const numBefore = splitSum[i - 1];
             const numAfter = splitSum[i + 1];
@@ -102,8 +122,50 @@ function performCalculationHelper(sum){
 
 
             splitSum.splice(i-1, 3, result);
+        } else {
+            i += 2;
         }
     }
+
+
+
+    // for(let i = 1; i < splitSum.length; i+=2){
+    //     if(splitSum[i] === '/'){
+    //         const numBefore = splitSum[i - 1];
+    //         const numAfter = splitSum[i + 1];
+    //         const result = operate(numBefore, numAfter, '/');
+
+    //         if(result === errorText){
+    //             return errorText;
+    //         }
+
+    //         splitSum.splice(i-1, 3, result);
+
+    //     } else if (splitSum[i] === 'x'){
+    //         const numBefore = splitSum[i - 1];
+    //         const numAfter = splitSum[i + 1];
+    //         const result = operate(numBefore, numAfter, 'x');
+
+    //         splitSum.splice(i-1, 3, result);
+    //     }
+    // }
+
+    // for(let i = 1; i < splitSum.length; i+= 2){
+    //     if(splitSum[i] === '+'){
+    //         const numBefore = splitSum[i - 1];
+    //         const numAfter = splitSum[i + 1];
+    //         const result = operate(numBefore, numAfter, '+');
+
+    //         splitSum.splice(i-1, 3, result);
+    //     } else if (splitSum[i] === '-'){
+    //         const numBefore = splitSum[i - 1];
+    //         const numAfter = splitSum[i + 1];
+    //         const result = operate(numBefore, numAfter, '-');
+
+
+    //         splitSum.splice(i-1, 3, result);
+    //     }
+    // }
 
     return splitSum[0];
 }
@@ -217,5 +279,5 @@ function divide(a, b){
     const numB = Number.parseFloat(b);
     if(numB === NaN) return errorText;
 
-    return numA / numB;
+    return numB !== 0 ? numA / numB : errorText;
 }
