@@ -19,7 +19,15 @@ function init(){
 
 function performBackspace(){
     const display = document.querySelector("#calculator-sum");
-    
+    let text = display.textContent;
+
+    if(text === "") return;
+
+    if(text.slice(-2, -1) === " "){
+        display.textContent = text.slice(0, -2);
+    } else {
+        display.textContent = text.slice(0, -1);
+    }
 }
 
 function addHighlightEventListeners(){
@@ -27,6 +35,7 @@ function addHighlightEventListeners(){
     const operatorButtons = document.querySelectorAll(".operator");
     const acButton = document.querySelector("#ac");
     const equalsButton = document.querySelector("#equals");
+    const backspaceButton = document.querySelector("#backspace");
 
     numberButtons.forEach((button) => {
         button.addEventListener("mouseenter", (e) => highlightOnEnter(e, "blue"));
@@ -43,6 +52,9 @@ function addHighlightEventListeners(){
 
     equalsButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "red"));
     equalsButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
+
+    backspaceButton.addEventListener("mouseenter", (e) => highlightOnEnter(e, "purple"));
+    backspaceButton.addEventListener("mouseleave", (e) => highlightOnExit(e));
 }
 
 function addInputEventListeners(){
@@ -127,45 +139,6 @@ function performCalculationHelper(sum){
         }
     }
 
-
-
-    // for(let i = 1; i < splitSum.length; i+=2){
-    //     if(splitSum[i] === '/'){
-    //         const numBefore = splitSum[i - 1];
-    //         const numAfter = splitSum[i + 1];
-    //         const result = operate(numBefore, numAfter, '/');
-
-    //         if(result === errorText){
-    //             return errorText;
-    //         }
-
-    //         splitSum.splice(i-1, 3, result);
-
-    //     } else if (splitSum[i] === 'x'){
-    //         const numBefore = splitSum[i - 1];
-    //         const numAfter = splitSum[i + 1];
-    //         const result = operate(numBefore, numAfter, 'x');
-
-    //         splitSum.splice(i-1, 3, result);
-    //     }
-    // }
-
-    // for(let i = 1; i < splitSum.length; i+= 2){
-    //     if(splitSum[i] === '+'){
-    //         const numBefore = splitSum[i - 1];
-    //         const numAfter = splitSum[i + 1];
-    //         const result = operate(numBefore, numAfter, '+');
-
-    //         splitSum.splice(i-1, 3, result);
-    //     } else if (splitSum[i] === '-'){
-    //         const numBefore = splitSum[i - 1];
-    //         const numAfter = splitSum[i + 1];
-    //         const result = operate(numBefore, numAfter, '-');
-
-
-    //         splitSum.splice(i-1, 3, result);
-    //     }
-    // }
 
     return splitSum[0];
 }
